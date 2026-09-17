@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "question": "Сколько скважин в статусе producing?",
+    "gold_sql": "SELECT COUNT(*) FROM wells WHERE status = 'producing';"
+  },
+  {
+    "id": 8,
+    "question": "Контракты на продажу в статусе active",
+    "gold_sql": "SELECT contract_number, buyer_id, volume_bbl, price_per_bbl FROM sales_contracts WHERE status = 'active';"
+  },
+  {
+    "id": 9,
+    "question": "Затраты по месторождениям за 2024 год",
+    "gold_sql": "SELECT f.field_name, SUM(oc.amount_usd) FROM operating_costs oc JOIN fields f ON oc.field_id = f.field_id WHERE EXTRACT(YEAR FROM oc.cost_date) = 2024 GROUP BY f.field_id;"
+  },
+  {
+    "id": 12,
+    "question": "Средний GOR по скважинам",
+    "gold_sql": "SELECT w.well_name, AVG(rd.GOR_scf_bbl) FROM reservoir_data rd JOIN wells w ON rd.well_id = w.well_id WHERE rd.GOR_scf_bbl IS NOT NULL GROUP BY w.well_id;"
+  },
+  {
+    "id": 13,
+    "question": "Инциденты безопасности с severity high за 2023",
+    "gold_sql": "SELECT incident_date, incident_type, field_id, lost_time_days FROM safety_incidents WHERE severity = 'high' AND EXTRACT(YEAR FROM incident_date) = 2023;"
+  },
+  {
+    "id": 22,
+    "question": "Затраты по категориям за 2024",
+    "gold_sql": "SELECT cost_category, SUM(amount_usd) FROM operating_costs WHERE EXTRACT(YEAR FROM cost_date) = 2024 GROUP BY cost_category;"
+  },
+  {
+    "id": 24,
+    "question": "Reservoir data с water_cut более 50%",
+    "gold_sql": "SELECT field_id, well_id, data_date, water_cut_percent FROM reservoir_data WHERE water_cut_percent > 50;"
+  },
+  {
+    "id": 26,
+    "question": "Liftings по контрактам за 2024",
+    "gold_sql": "SELECT sc.contract_number, SUM(l.volume_bbl), SUM(l.volume_bbl * l.price_per_bbl) FROM liftings l JOIN sales_contracts sc ON l.contract_id = sc.contract_id WHERE EXTRACT(YEAR FROM l.lifting_date) = 2024 GROUP BY sc.contract_id;"
+  },
+  {
+    "id": 28,
+    "question": "Сотрудники с зарплатой более 150000 usd",
+    "gold_sql": "SELECT first_name, last_name, position, salary_usd FROM employees WHERE salary_usd > 150000;"
+  },
+  {
+    "id": 29,
+    "question": "Добыча газа по месторождениям за 2023",
+    "gold_sql": "SELECT f.field_name, SUM(fp.gas_mcf) FROM field_production fp JOIN fields f ON fp.field_id = f.field_id WHERE EXTRACT(YEAR FROM fp.record_date) = 2023 GROUP BY f.field_id;"
+  },
+  {
+    "id": 30,
+    "question": "Трубопроводы типа oil",
+    "gold_sql": "SELECT pipeline_name, origin_field_id, capacity_bopd FROM pipelines WHERE pipeline_type = 'oil';"
+  },
+  {
+    "id": 33,
+    "question": "Буровые операции с cost более 1 млн",
+    "gold_sql": "SELECT well_id, operation_date, operation_type, cost_usd FROM drilling_operations WHERE cost_usd > 1000000;"
+  },
+  {
+    "id": 34,
+    "question": "Среднее давление в пласте по скважинам",
+    "gold_sql": "SELECT w.well_name, AVG(rd.pressure_psi) FROM reservoir_data rd JOIN wells w ON rd.well_id = w.well_id WHERE rd.pressure_psi IS NOT NULL GROUP BY w.well_id;"
+  },
+  {
+    "id": 35,
+    "question": "Платформы с capacity более 50000 bopd",
+    "gold_sql": "SELECT platform_name, capacity_bopd, field_id FROM platforms WHERE capacity_bopd > 50000;"
+  },
+  {
+    "id": 36,
+    "question": "Затраты maintenance за 2024",
+    "gold_sql": "SELECT SUM(amount_usd) FROM operating_costs WHERE cost_category = 'maintenance' AND EXTRACT(YEAR FROM cost_date) = 2024;"
+  },
+  {
+    "id": 37,
+    "question": "Скважины по типам",
+    "gold_sql": "SELECT wt.type_name, COUNT(w.well_id) FROM wells w JOIN well_types wt ON w.well_type_id = wt.well_type_id GROUP BY wt.well_type_id;"
+  },
+  {
+    "id": 38,
+    "question": "Liftings с price_per_bbl более 80",
+    "gold_sql": "SELECT lifting_date, volume_bbl, price_per_bbl FROM liftings WHERE price_per_bbl > 80;"
+  },
+  {
+    "id": 39,
+    "question": "Месторождения в статусе production",
+    "gold_sql": "SELECT field_name, estimated_reserves_mboe, region_id FROM fields WHERE status = 'production';"
+  },
+  {
+    "id": 41,
+    "question": "Добыча воды по скважинам за 2024",
+    "gold_sql": "SELECT w.well_name, SUM(pr.water_bbl) FROM production_records pr JOIN wells w ON pr.well_id = w.well_id WHERE EXTRACT(YEAR FROM pr.record_date) = 2024 GROUP BY w.well_id;"
+  },
+  {
+    "id": 42,
+    "question": "Буровые кампании с budget более 50 млн",
+    "gold_sql": "SELECT campaign_name, field_id, budget_usd FROM drilling_campaigns WHERE budget_usd > 50000000;"
+  },
+  {
+    "id": 44,
+    "question": "Трубопроводы с length более 200 км",
+    "gold_sql": "SELECT pipeline_name, length_km, capacity_bopd FROM pipelines WHERE length_km > 200;"
+  },
+  {
+    "id": 49,
+    "question": "Добыча по кварталам 2024",
+    "gold_sql": "SELECT EXTRACT(QUARTER FROM record_date) as quarter, SUM(oil_bbl), SUM(gas_mcf) FROM production_records WHERE EXTRACT(YEAR FROM record_date) = 2024 GROUP BY EXTRACT(QUARTER FROM record_date);"
+  },
+  {
+    "id": 50,
+    "question": "Платформы по месторождениям",
+    "gold_sql": "SELECT f.field_name, COUNT(p.platform_id) FROM platforms p JOIN fields f ON p.field_id = f.field_id GROUP BY f.field_id;"
+  },
+  {
+    "id": 54,
+    "question": "Топ-5 покупателей по объёму liftings",
+    "gold_sql": "SELECT b.buyer_name, SUM(l.volume_bbl) FROM liftings l JOIN sales_contracts sc ON l.contract_id = sc.contract_id JOIN buyers b ON sc.buyer_id = b.buyer_id GROUP BY b.buyer_id ORDER BY SUM(l.volume_bbl) DESC LIMIT 5;"
+  },
+  {
+    "id": 57,
+    "question": "Drilling operations по operation_type",
+    "gold_sql": "SELECT operation_type, COUNT(*), SUM(cost_usd) FROM drilling_operations GROUP BY operation_type;"
+  },
+  {
+    "id": 58,
+    "question": "Скважины injection",
+    "gold_sql": "SELECT well_name, field_id FROM wells WHERE status = 'injection';"
+  },
+  {
+    "id": 59,
+    "question": "Reservoir data с pressure менее 3000 psi",
+    "gold_sql": "SELECT field_id, well_id, pressure_psi, data_date FROM reservoir_data WHERE pressure_psi < 3000;"
+  },
+  {
+    "id": 60,
+    "question": "Контракты с volume более 500000 bbl",
+    "gold_sql": "SELECT contract_number, volume_bbl, price_per_bbl FROM sales_contracts WHERE volume_bbl > 500000;"
+  },
+  {
+    "id": 61,
+    "question": "Сотрудники на платформе",
+    "gold_sql": "SELECT e.first_name, e.last_name, p.platform_name FROM employees e JOIN platforms p ON e.platform_id = p.platform_id;"
+  },
+  {
+    "id": 62,
+    "question": "Добыча по скважинам за 2023",
+    "gold_sql": "SELECT w.well_name, SUM(pr.oil_bbl), SUM(pr.gas_mcf) FROM production_records pr JOIN wells w ON pr.well_id = w.well_id WHERE EXTRACT(YEAR FROM pr.record_date) = 2023 GROUP BY w.well_id;"
+  },
+  {
+    "id": 64,
+    "question": "Инциденты на платформах",
+    "gold_sql": "SELECT p.platform_name, si.incident_type, si.incident_date FROM safety_incidents si JOIN platforms p ON si.platform_id = p.platform_id;"
+  },
+  {
+    "id": 66,
+    "question": "Liftings по месяцам 2024",
+    "gold_sql": "SELECT EXTRACT(MONTH FROM lifting_date) as month, SUM(volume_bbl), SUM(volume_bbl * price_per_bbl) FROM liftings WHERE EXTRACT(YEAR FROM lifting_date) = 2024 GROUP BY EXTRACT(MONTH FROM lifting_date);"
+  },
+  {
+    "id": 67,
+    "question": "Буровые кампании completed",
+    "gold_sql": "SELECT campaign_name, field_id, start_date, end_date FROM drilling_campaigns WHERE status = 'completed';"
+  },
+  {
+    "id": 74,
+    "question": "Water cut по скважинам",
+    "gold_sql": "SELECT w.well_name, AVG(rd.water_cut_percent) FROM reservoir_data rd JOIN wells w ON rd.well_id = w.well_id WHERE rd.water_cut_percent IS NOT NULL GROUP BY w.well_id;"
+  },
+  {
+    "id": 76,
+    "question": "Затраты по скважинам и платформам",
+    "gold_sql": "SELECT w.well_name, p.platform_name, SUM(oc.amount_usd) FROM operating_costs oc LEFT JOIN wells w ON oc.well_id = w.well_id LEFT JOIN platforms p ON oc.platform_id = p.platform_id WHERE oc.well_id IS NOT NULL OR oc.platform_id IS NOT NULL GROUP BY w.well_name, p.platform_name;"
+  },
+  {
+    "id": 77,
+    "question": "Скважины abandoned",
+    "gold_sql": "SELECT well_name, field_id, depth_m FROM wells WHERE status = 'abandoned';"
+  },
+  {
+    "id": 78,
+    "question": "Добыча с downtime более 24 часов за месяц",
+    "gold_sql": "SELECT w.well_name, pr.record_date, pr.downtime_hours FROM production_records pr JOIN wells w ON pr.well_id = w.well_id WHERE pr.downtime_hours > 24;"
+  },
+  {
+    "id": 80,
+    "question": "Сотрудники по отделам",
+    "gold_sql": "SELECT department, COUNT(*) FROM employees GROUP BY department;"
+  },
+  {
+    "id": 81,
+    "question": "Трубопроводы в статусе maintenance",
+    "gold_sql": "SELECT pipeline_name, pipeline_type FROM pipelines WHERE status = 'maintenance';"
+  },
+  {
+    "id": 82,
+    "question": "Liftings с vessel_name",
+    "gold_sql": "SELECT lifting_date, volume_bbl, vessel_name FROM liftings WHERE vessel_name IS NOT NULL;"
+  },
+  {
+    "id": 84,
+    "question": "Затраты logistics за 2024",
+    "gold_sql": "SELECT SUM(amount_usd) FROM operating_costs WHERE cost_category = 'logistics' AND EXTRACT(YEAR FROM cost_date) = 2024;"
+  },
+  {
+    "id": 86,
+    "question": "Инциденты environmental",
+    "gold_sql": "SELECT incident_date, field_id, description FROM safety_incidents WHERE incident_type = 'environmental';"
+  },
+  {
+    "id": 87,
+    "question": "Средний price_per_bbl по покупателям",
+    "gold_sql": "SELECT b.buyer_name, AVG(l.price_per_bbl) FROM liftings l JOIN sales_contracts sc ON l.contract_id = sc.contract_id JOIN buyers b ON sc.buyer_id = b.buyer_id GROUP BY b.buyer_id;"
+  },
+  {
+    "id": 88,
+    "question": "Резервуары с уровнем менее 20%",
+    "gold_sql": "SELECT tank_name, current_level_bbl, capacity_bbl FROM storage_tanks WHERE (current_level_bbl/capacity_bbl) < 0.2 AND status = 'active';"
+  },
+  {
+    "id": 90,
+    "question": "Буровые операции с contractor",
+    "gold_sql": "SELECT operation_date, operation_type, contractor, cost_usd FROM drilling_operations WHERE contractor IS NOT NULL;"
+  },
+  {
+    "id": 94,
+    "question": "Контракты на gas",
+    "gold_sql": "SELECT contract_number, volume_bbl, buyer_id FROM sales_contracts WHERE product_type = 'gas';"
+  },
+  {
+    "id": 95,
+    "question": "Инциденты с lost_time_days более 10",
+    "gold_sql": "SELECT incident_date, incident_type, lost_time_days, field_id FROM safety_incidents WHERE lost_time_days > 10;"
+  },
+  {
+    "id": 96,
+    "question": "Сотрудники, принятые в 2022",
+    "gold_sql": "SELECT first_name, last_name, hire_date, position FROM employees WHERE EXTRACT(YEAR FROM hire_date) = 2022;"
+  },
+  {
+    "id": 98,
+    "question": "Общая выручка от liftings по годам",
+    "gold_sql": "SELECT EXTRACT(YEAR FROM lifting_date) as year, SUM(volume_bbl * price_per_bbl) FROM liftings GROUP BY EXTRACT(YEAR FROM lifting_date);"
+  },
+  {
+    "id": 99,
+    "question": "Месторождения с наибольшей добычей за 2024",
+    "gold_sql": "SELECT f.field_name, SUM(fp.oil_bbl) as total_oil FROM field_production fp JOIN fields f ON fp.field_id = f.field_id WHERE EXTRACT(YEAR FROM fp.record_date) = 2024 GROUP BY f.field_id ORDER BY total_oil DESC LIMIT 5;"
+  }
+]

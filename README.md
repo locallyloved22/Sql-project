@@ -1,2 +1,83 @@
-# Sql-project
-I built a program that turns Russian questions into SQL queries. It connects to five PostgreSQL databases, checks the SQL, runs it, and shows the real answer. I also added a simple app window, Docker setup, tests, and quality metrics
+# Text2SQL: готовое приложение «вопрос → SQL → ответ»
+
+## Запуск без терминала
+
+На Mac откройте папку проекта в Finder и дважды нажмите **`START_TEXT2SQL.command`**. Скрипт сам проверит Docker, запустит пять баз и откроет обычное русскоязычное окно без браузера.
+
+Дальше: выберите компанию → выберите модель → напишите вопрос → нажмите **Найти ответ**.
+
+Полная простая инструкция: [КАК_ИСПОЛЬЗОВАТЬ.md](КАК_ИСПОЛЬЗОВАТЬ.md). Запуск в VS Code: [КАК_ЗАПУСТИТЬ_В_VSCODE.md](КАК_ЗАПУСТИТЬ_В_VSCODE.md). Техническая документация: [solution/README.md](solution/README.md). Итоговый отчёт: [FINAL_REPORT.md](FINAL_REPORT.md).
+
+---
+
+# Исходный набор данных и задание
+
+Набор из 5 объёмных баз данных с вопросами на естественном языке и эталонными SQL-ответами для обучения и оценки систем Text2SQL.
+
+## Структура проекта
+
+```
+Text2SQL/
+├── ASSIGNMENT.md              # Подробное описание задания (в стиле Kaggle)
+├── README.md                  # Этот файл
+├── databases/
+│   ├── 01_trading_company/    # Торговая компания
+│   │   ├── schema.sql
+│   │   ├── generate_data.py
+│   │   └── questions.json
+│   ├── 02_legal_firm/         # Юридическая фирма
+│   ├── 03_logistics_company/  # Логистическая компания
+│   ├── 04_mining_company/     # Горнорудная компания
+│   └── 05_oil_company/       # Нефтедобывающая компания
+```
+
+## Быстрый старт
+
+### 1. Создание баз данных (PostgreSQL)
+
+```bash
+# Для каждой базы:
+cd databases/01_trading_company
+psql -U postgres -d text2sql -f schema.sql
+python generate_data.py
+psql -U postgres -d text2sql -f data.sql
+```
+
+### 2. Альтернатива: SQLite
+
+Схемы написаны для PostgreSQL. Для SQLite потребуется адаптация:
+- `SERIAL` → `INTEGER PRIMARY KEY AUTOINCREMENT`
+- `TIMESTAMP` → `TEXT`
+- `DECIMAL` → `REAL`
+- `EXTRACT(YEAR FROM ...)` → `strftime('%Y', ...)`
+
+### 3. Формат вопросов
+
+Каждый `questions.json` содержит массив объектов:
+```json
+{"id": 1, "question": "Вопрос на русском", "gold_sql": "SELECT ..."}
+```
+
+## Базы данных
+
+| База | Таблиц | Описание |
+|------|--------|----------|
+| Торговая компания | 24 | Товары, заказы, склады, поставщики, B2B/B2C |
+| Юридическая фирма | 22 | Дела, клиенты, юристы, счета, заседания |
+| Логистика | 21 | Отгрузки, маршруты, транспорт, трекинг |
+| Горнорудная | 20 | Рудники, добыча, обогащение, контракты |
+| Нефтедобыча | 21 | Месторождения, скважины, добыча, liftings |
+
+Данные охватывают период **2020–2025** годов.
+
+## Задание
+
+См. **[ASSIGNMENT.md](ASSIGNMENT.md)** — полное описание задания, метрик и правил.
+
+## Метрики
+
+- **Execution Accuracy** — доля запросов с правильным результатом
+- **Jaccard Distance** — сходство токенов SQL
+- **Latency** — время ответа
+- **Valid SQL Rate** — доля синтаксически корректных запросов
+- **Exact Match** — точное совпадение с эталоном

@@ -1,0 +1,65 @@
+x-db-common: &db-common
+  image: postgres:16-alpine
+  restart: unless-stopped
+  environment: &db-env
+    POSTGRES_USER: text2sql_admin
+    POSTGRES_PASSWORD: text2sql_admin
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U text2sql_admin -d $$POSTGRES_DB"]
+    interval: 3s
+    timeout: 3s
+    retries: 30
+
+services:
+  trading-db:
+    <<: *db-common
+    environment: {<<: *db-env, POSTGRES_DB: trading}
+    ports: ["55431:5432"]
+    volumes:
+      - trading-data:/var/lib/postgresql/data
+      - ./databases/01_trading_company/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./solution/db/generated/01_trading_company.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./solution/db/init-readonly.sql:/docker-entrypoint-initdb.d/99-readonly.sql:ro
+  legal-db:
+    <<: *db-common
+    environment: {<<: *db-env, POSTGRES_DB: legal}
+    ports: ["55432:5432"]
+    volumes:
+      - legal-data:/var/lib/postgresql/data
+      - ./databases/02_legal_firm/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./solution/db/generated/02_legal_firm.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./solution/db/init-readonly.sql:/docker-entrypoint-initdb.d/99-readonly.sql:ro
+  logistics-db:
+    <<: *db-common
+    environment: {<<: *db-env, POSTGRES_DB: logistics}
+    ports: ["55433:5432"]
+    volumes:
+      - logistics-data:/var/lib/postgresql/data
+      - ./databases/03_logistics_company/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./solution/db/generated/03_logistics_company.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./solution/db/init-readonly.sql:/docker-entrypoint-initdb.d/99-readonly.sql:ro
+  mining-db:
+    <<: *db-common
+    environment: {<<: *db-env, POSTGRES_DB: mining}
+    ports: ["55434:5432"]
+    volumes:
+      - mining-data:/var/lib/postgresql/data
+      - ./databases/04_mining_company/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./solution/db/generated/04_mining_company.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./solution/db/init-readonly.sql:/docker-entrypoint-initdb.d/99-readonly.sql:ro
+  oil-db:
+    <<: *db-common
+    environment: {<<: *db-env, POSTGRES_DB: oil}
+    ports: ["55435:5432"]
+    volumes:
+      - oil-data:/var/lib/postgresql/data
+      - ./databases/05_oil_company/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./solution/db/generated/05_oil_company.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+      - ./solution/db/init-readonly.sql:/docker-entrypoint-initdb.d/99-readonly.sql:ro
+
+volumes:
+  trading-data:
+  legal-data:
+  logistics-data:
+  mining-data:
+  oil-data:

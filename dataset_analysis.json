@@ -1,0 +1,204 @@
+{
+  "source": "databases/*/questions.json (all 500 original examples; private files are not read)",
+  "classification": {
+    "simple": "score <= 1; no subquery; at most one JOIN",
+    "medium": "score <= 4; at most two JOINs and one subquery; no window function",
+    "hard": "all remaining queries",
+    "score": "JOIN + 2*subquery + 2*CTE + 2*window + GROUP BY + HAVING + 2*set operation"
+  },
+  "totals": {
+    "domains": 5,
+    "tables": 100,
+    "questions": 500,
+    "question_length_words": {
+      "mean": 5.05,
+      "median": 5.0
+    },
+    "sql_length_tokens": {
+      "mean": 24.68,
+      "median": 19.0
+    },
+    "features": {
+      "avg": 42,
+      "count": 123,
+      "cte": 0,
+      "group_by": 173,
+      "join": 159,
+      "limit": 27,
+      "max": 1,
+      "min": 1,
+      "multiple_joins": 29,
+      "order_by": 27,
+      "subquery": 7,
+      "sum": 125,
+      "window_function": 0
+    },
+    "complexity": {
+      "simple": 368,
+      "medium": 127,
+      "hard": 5
+    }
+  },
+  "domains": {
+    "01_trading_company": {
+      "tables": 20,
+      "questions": 100,
+      "question_length_words": {
+        "mean": 6.41,
+        "median": 6.0
+      },
+      "sql_length_tokens": {
+        "mean": 27.07,
+        "median": 22.0
+      },
+      "features": {
+        "avg": 11,
+        "count": 40,
+        "cte": 0,
+        "group_by": 43,
+        "join": 36,
+        "limit": 11,
+        "max": 1,
+        "min": 1,
+        "multiple_joins": 10,
+        "order_by": 13,
+        "subquery": 4,
+        "sum": 21,
+        "window_function": 0
+      },
+      "complexity": {
+        "simple": 68,
+        "medium": 29,
+        "hard": 3
+      }
+    },
+    "02_legal_firm": {
+      "tables": 20,
+      "questions": 100,
+      "question_length_words": {
+        "mean": 5.01,
+        "median": 5.0
+      },
+      "sql_length_tokens": {
+        "mean": 22.55,
+        "median": 17.5
+      },
+      "features": {
+        "avg": 7,
+        "count": 28,
+        "cte": 0,
+        "group_by": 33,
+        "join": 26,
+        "limit": 3,
+        "max": 0,
+        "min": 0,
+        "multiple_joins": 4,
+        "order_by": 3,
+        "subquery": 1,
+        "sum": 21,
+        "window_function": 0
+      },
+      "complexity": {
+        "simple": 79,
+        "medium": 21,
+        "hard": 0
+      }
+    },
+    "03_logistics_company": {
+      "tables": 20,
+      "questions": 100,
+      "question_length_words": {
+        "mean": 4.68,
+        "median": 5.0
+      },
+      "sql_length_tokens": {
+        "mean": 21.51,
+        "median": 17.0
+      },
+      "features": {
+        "avg": 7,
+        "count": 26,
+        "cte": 0,
+        "group_by": 28,
+        "join": 24,
+        "limit": 4,
+        "max": 0,
+        "min": 0,
+        "multiple_joins": 1,
+        "order_by": 5,
+        "subquery": 2,
+        "sum": 13,
+        "window_function": 0
+      },
+      "complexity": {
+        "simple": 82,
+        "medium": 17,
+        "hard": 1
+      }
+    },
+    "04_mining_company": {
+      "tables": 20,
+      "questions": 100,
+      "question_length_words": {
+        "mean": 4.61,
+        "median": 5.0
+      },
+      "sql_length_tokens": {
+        "mean": 27.37,
+        "median": 23.0
+      },
+      "features": {
+        "avg": 9,
+        "count": 17,
+        "cte": 0,
+        "group_by": 36,
+        "join": 43,
+        "limit": 6,
+        "max": 0,
+        "min": 0,
+        "multiple_joins": 10,
+        "order_by": 3,
+        "subquery": 0,
+        "sum": 34,
+        "window_function": 0
+      },
+      "complexity": {
+        "simple": 64,
+        "medium": 36,
+        "hard": 0
+      }
+    },
+    "05_oil_company": {
+      "tables": 20,
+      "questions": 100,
+      "question_length_words": {
+        "mean": 4.54,
+        "median": 4.5
+      },
+      "sql_length_tokens": {
+        "mean": 24.9,
+        "median": 18.0
+      },
+      "features": {
+        "avg": 8,
+        "count": 12,
+        "cte": 0,
+        "group_by": 33,
+        "join": 30,
+        "limit": 3,
+        "max": 0,
+        "min": 0,
+        "multiple_joins": 4,
+        "order_by": 3,
+        "subquery": 0,
+        "sum": 36,
+        "window_function": 0
+      },
+      "complexity": {
+        "simple": 75,
+        "medium": 24,
+        "hard": 1
+      }
+    }
+  }
+}

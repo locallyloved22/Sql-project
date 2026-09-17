@@ -1,0 +1,13 @@
+provider: openai
+model: gpt-5.6-sol
+base_url: https://api.openai.com/v1
+temperature: 0.0
+timeout_seconds: 30
+statement_timeout_ms: 5000
+schema_linking: true
+max_tables: 8
+few_shot_mode: retrieval
+few_shot_count: 4
+validation: true
+self_correction: true
+max_corrections: 2
